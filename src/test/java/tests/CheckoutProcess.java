@@ -1,8 +1,9 @@
+package tests;
+
+import baseTest.baseTest;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
-public class CheckoutProcess extends baseTest{
+public class CheckoutProcess extends baseTest {
     @Test
     public void checkoutProcess(){
         getHomePage().addSpecificItemToCart("Sauce Labs Backpack");

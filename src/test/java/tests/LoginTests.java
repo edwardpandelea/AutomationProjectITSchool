@@ -1,3 +1,6 @@
+package tests;
+
+import baseTest.baseTest;
 import org.junit.jupiter.api.Test;
 
 public class LoginTests extends baseTest {
