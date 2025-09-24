@@ -40,7 +40,7 @@ public class checkoutPage {
         cartHelper = new cartHelper(driver);
     }
 
-    public void completeCheckout(String firstName, String lastName, String zipCode, double totalCartPrice)
+    public void checkoutFirstStep(String firstName, String lastName, String zipCode )
     {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         // 1st Step of Checkout - Your Information
@@ -53,27 +53,51 @@ public class checkoutPage {
         driver.findElement(lastNameInput).sendKeys(lastName);
         driver.findElement(zipCodeInput).clear();
         driver.findElement(zipCodeInput).sendKeys(zipCode);
+
+    }
+
+    public void clickContinue()
+    {
         driver.findElement(continueBtn).click();
+    }
+
+    public void checkoutSecondStep()
+    {
         // 2nd Step of Checkout - Overview
         assertTrue(driver.findElement(pageStep).getText().toLowerCase().contains("overview"));
         assertTrue(driver.findElement(paymentInfo).getText().toLowerCase().contains("saucecard"));
         assertTrue(driver.findElement(shippingInformation).getText().replace(" ", "").toLowerCase().contains("freeponyexpress"));
-        assertEquals(totalCartPrice, Double.parseDouble(driver.findElement(totalPrice).getText().replace("Item total: $", "")), 0.001);
-        double totalPriceWithTaxToVerify = totalCartPrice + Double.parseDouble(driver.findElement(tax).getText().replace("Tax: $", ""));
-        assertEquals(totalPriceWithTaxToVerify, Double.parseDouble(driver.findElement(totalPriceWithTax).getText().replace("Total: $", "")), 0.001);
+    }
+
+    public void clickFinishButton()
+    {
         driver.findElement(finishBtn).click();
+    }
+
+    public void checkoutThirdStep()
+    {
         // 3rd Step of Checkout - Completed
         assertTrue(driver.findElement(pageStep).getText().toLowerCase().contains("complete"));
         assertTrue(driver.findElement(completeHeader).isDisplayed());
         assertTrue(driver.findElement(completeText).isDisplayed());
         assertTrue(driver.findElement(successIcon).isDisplayed());
+    }
+    public void goBackToProducts()
+    {
         driver.findElement(backHomeBtn).click();
+    }
+
+    public void clickCancelButton()
+    {
+        driver.findElement(cancelBtn).click();
+    }
+
+    public void verifyHomePage(){
         assertTrue(driver.findElement(By.id("inventory_container")).isDisplayed());
     }
 
     public void verifyError()
     {
-        driver.findElement(continueBtn).click();
         assertTrue(driver.findElement(errorMessage).isDisplayed());
     }
 

@@ -24,6 +24,10 @@ public class loginPage {
         driver.findElement(loginButton).click();
     }
 
+    public void verifyLoginPage(){
+        assertTrue(driver.findElement(usernameInput).isDisplayed());
+    }
+
     public void verifyLogin(){
         assertTrue(driver.findElement(inventoryContainer).isDisplayed());
     }

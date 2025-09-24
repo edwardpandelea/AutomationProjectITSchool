@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class cartHelper {
     private final WebDriver driver;
@@ -61,5 +62,17 @@ public class cartHelper {
     public String getItemDescription(int index)
     {
         return driver.findElements(itemDescription).get(index).getText();
+    }
+
+    public void verifyEmptyCart()
+    {
+        assertEquals(0, getItemNumber());
+    }
+
+    public void verifyItem(String title){
+        assertEquals(1, getItemNumber());
+        assertTrue(driver.findElement(itemNameLink).getText().contains(title));
+        assertTrue(driver.findElement(itemDescription).isDisplayed());
+        assertTrue(driver.findElement(itemPrice).isDisplayed());
     }
 }

@@ -20,6 +20,18 @@ public class productPage {
         this.driver = driver;
     }
 
+    public void verifyProductPage(){
+        assertTrue(driver.findElement(productName).isDisplayed());
+    }
+
+    public void verifyPage(){
+        assertTrue(driver.findElement(productName).isDisplayed());
+        assertTrue(driver.findElement(productDescription).isDisplayed());
+        assertTrue(driver.findElement(productPrice).isDisplayed());
+        assertTrue(driver.findElement(addToCartBtn).isDisplayed());
+        assertTrue(driver.findElement(goBackToProductsBtn).isDisplayed());
+    }
+
     public void verifyProduct(String title, Double price)
     {
         assertTrue(driver.findElement(productName).getText().contains(title));

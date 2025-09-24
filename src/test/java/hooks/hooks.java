@@ -1,18 +1,18 @@
-package baseTest;
+package hooks;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import pages.*;
 import utils.cartHelper;
-
+import pages.*;
 
 import java.time.Duration;
 
-public class baseTest {
-    protected  WebDriver driver;
+public class hooks {
+    private static WebDriver driver;
     private loginPage loginPage;
     private homePage homePage;
     private productPage productPage;
@@ -20,6 +20,9 @@ public class baseTest {
     private checkoutPage checkoutPage;
     private cartHelper cartHelper;
 
+    public static WebDriver getDriver() {
+        return driver;
+    }
     public cartHelper getCartHelper() {
         return cartHelper;
     }
@@ -41,12 +44,26 @@ public class baseTest {
         return loginPage;
     }
 
-    @BeforeEach
-    public void setUp() {
+    @Before("@Login")
+    public void setUpLogin()
+    {
+        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
         options.addArguments("--incognito");
-        driver = new  ChromeDriver(options);
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.manage().window().maximize();
+        driver.get("https://www.saucedemo.com/");
+    }
+
+
+    @Before("@needLogin")
+    public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--incognito");
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().window().maximize();
         driver.get("https://www.saucedemo.com/");
         loginPage = new loginPage(driver);
@@ -56,11 +73,17 @@ public class baseTest {
         checkoutPage = new checkoutPage(driver);
         cartHelper = new cartHelper(driver);
         loginPage.login("standard_user", "secret_sauce");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
 
 
-    @AfterEach
+    @After("@Login")
+    public void closeBrowser() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    @After
     public void tearDown() {
         if (driver != null) {
             driver.quit();
